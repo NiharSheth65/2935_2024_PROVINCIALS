@@ -33,7 +33,7 @@ public class autoScoreAmp extends SequentialCommandGroup {
 
       new ParallelDeadlineGroup(
 
-        new DriveForwardSetDistance(drive, -36, DriveConstants.autoSpeed),
+        new DriveForwardSetDistance(drive, -38, DriveConstants.autoSpeed),
         new autoRevUpCommand(shooter, ShooterConstants.ampTopMotorSpeed, ShooterConstants.ampBottomMotorSpeed)
       ), 
 

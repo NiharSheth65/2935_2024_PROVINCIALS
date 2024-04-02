@@ -25,7 +25,6 @@ public class autoHuntNoteCommand extends SequentialCommandGroup {
         new VisionTurnToTargetCommand(drive, vision, VisionConstants.ambientPipeline, false), 
         new VisionDriveToTargetCommand(drive, vision, VisionConstants.ambientPipeline, false), 
         new VisionTurnToTargetCommand(drive, vision, VisionConstants.ambientPipeline, false)
-
         // new VisionDriveAndAlignCommand(drive, vision, VisionConstants.ambientPipeline, false)
       )
     );

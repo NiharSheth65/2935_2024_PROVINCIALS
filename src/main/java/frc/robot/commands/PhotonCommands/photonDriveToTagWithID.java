@@ -8,6 +8,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.autoConstants;
@@ -34,6 +35,10 @@ public class photonDriveToTagWithID extends Command {
   
   private int targetId; 
 
+  private boolean photonDriveEnded; 
+
+  private int positionReached; 
+
   private SlewRateLimiter driveLimiter = new SlewRateLimiter(DriveConstants.driveSlew); 
   /** Creates a new photonDriveToTagWithID. */
   public photonDriveToTagWithID(PhotonSubsystem photon, DriveSubsystem drive, double targetPitch, int targetId, boolean endCommand) {
@@ -53,10 +58,15 @@ public class photonDriveToTagWithID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("THE PHOTON DRIVE COMMAND HAS STARTED");
     driveController.reset();
     driveSpeed = 0; 
     totalRunTime = System.currentTimeMillis(); 
     DRIVE_SUBSYSTEM.resetEncoders(); 
+    photonDriveEnded = false; 
+    positionReached = 0; 
+    bestTargetPitch = 0;
+
   }
 
 
@@ -71,10 +81,11 @@ public class photonDriveToTagWithID extends Command {
         bestTarget = PHOTON_SUBSYSTEM.getBestTarget(targetId); 
         bestTargetPitch = PHOTON_SUBSYSTEM.getBestTargetPitch(); 
         totalTimeSinceLastSeen = System.currentTimeMillis(); 
-      }else{}
-    }else{
-      bestTargetPitch = -2; 
+      }//else{}
     }
+    // else{
+    //   bestTargetPitch = -2; 
+    // }
 
     driveSpeed = -driveController.calculate(bestTargetPitch, driveSetpoint);
 
@@ -86,14 +97,33 @@ public class photonDriveToTagWithID extends Command {
       driveSpeed = -photonVisionConstants.photonMaxDriveSpeed; 
     }
 
+    if(bestTargetPitch > driveSetpoint){
+      photonDriveEnded = true; 
+    }
+
 
     DRIVE_SUBSYSTEM.setTank(driveLimiter.calculate(driveSpeed), driveLimiter.calculate(driveSpeed));
 
+
+    System.out.println("CURRENT PITCH: " +  bestTargetPitch); 
+
+    if(bestTargetPitch > driveSetpoint){
+      positionReached++; 
+      System.out.println("POSITOIN REACHED: "  + positionReached); 
+    }
+
+    // else{
+    //   positionReached = 0; 
+    // }
+
+
+    SmartDashboard.putBoolean("photon drive ended", photonDriveEnded); 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("THE PHOTON DRIVE COMMAND HAS ENDED");
     autoConstants.distanceDrivenDurringPhoton = DRIVE_SUBSYSTEM.getAverageEncoderDistanceInInches(); 
     DRIVE_SUBSYSTEM.stop(); 
   }
@@ -106,13 +136,15 @@ public class photonDriveToTagWithID extends Command {
       return true; 
     }
 
-    else if(PHOTON_SUBSYSTEM.getBestTargetPitch() > driveSetpoint){
+    if(bestTargetPitch > driveSetpoint && positionReached >= 20){
+      System.out.println("PHOTON PITCH: " + bestTargetPitch); 
+      System.out.println("POSITION REACHED" + positionReached); 
       return true; 
     }
 
-    else if(Math.abs(System.currentTimeMillis() - totalTimeSinceLastSeen) > photonVisionConstants.photonTargetAcquiredTimeOut){
-      return true; 
-    }
+    // else if(Math.abs(System.currentTimeMillis() - totalTimeSinceLastSeen) > photonVisionConstants.photonTargetAcquiredTimeOut){
+    //   return true; 
+    // }
 
     else if(Math.abs(System.currentTimeMillis() - totalRunTime) > photonVisionConstants.photonTurnTargetingTimeOut){
       return true; 

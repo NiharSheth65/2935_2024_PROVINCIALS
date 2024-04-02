@@ -45,6 +45,7 @@ public class note2Block extends SequentialCommandGroup {
         new autoSimpleDigestCommand(conveyer, intake, shooter)
       ), 
       
+      new DriveForwardSetDistance(drive, -7, DriveConstants.autoSpeed), 
       new autoShootNoteCommand(drive, photon, conveyer, targetId)      
     );
   }

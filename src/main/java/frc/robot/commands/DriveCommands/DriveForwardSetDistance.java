@@ -32,6 +32,7 @@ public class DriveForwardSetDistance extends Command {
   /** Creates a new DriveForwardSetDistance. */
   public DriveForwardSetDistance(DriveSubsystem drive, double distance, double maxSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
+    
     this.DRIVE_SUBSYSTEM = drive; 
     this.distanceInInches = distance;    
 

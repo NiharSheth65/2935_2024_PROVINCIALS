@@ -42,17 +42,18 @@ public class note4Block extends SequentialCommandGroup {
       new autoEatNoteCommand(drive, conveyer, intake), 
       
       new ParallelCommandGroup(
-        new DriveForwardSetDistance(drive, -35, DriveConstants.autoSpeed), 
+        new DriveForwardSetDistance(drive, -55, DriveConstants.autoSpeed), 
         new autoSimpleDigestCommand(conveyer, intake, shooter)
       ), 
  
-      new DriveTurnGyroCommand(drive, 30, false), 
+      new DriveTurnGyroCommand(drive, 40, false), 
 
       new ParallelDeadlineGroup(
         new autoHuntSpecificTag(drive, photon, targetId, 0, photonVisionConstants.speakerMiddleApproachPitch), 
         new autoRevUpCommand(shooter, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed)
       ), 
 
+      new DriveForwardSetDistance(drive, -7, DriveConstants.autoSpeed), 
       new autoShootNoteCommand(drive, photon, conveyer, targetId)
     );
   }

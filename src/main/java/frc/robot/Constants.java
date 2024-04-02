@@ -215,7 +215,7 @@ public final class Constants {
 
     // TOLERANCES FOR LINING UP TO NOTE 
     public static final double roughAlignmentTolerance = 5.5; 
-    public static final double fineAlignmentTolerance = 3.5; 
+    public static final double fineAlignmentTolerance = 5.5; 
 
     // STOPPING BEFORE NOTE DISTANCE 
     public static final double limelightDesiredApproachDistance = 35; 
@@ -224,7 +224,7 @@ public final class Constants {
     public static final double limelightDriveForwardAndIntakeDistance = limelightDesiredApproachDistance + 3;
 
     // VISION DRIVE TO PITCH 
-    public static final double limelightReadToIntakePitch = -18; 
+    public static final double limelightReadToIntakePitch = -17; 
     
     // LIMELIGHT TURN AND DRIVE SPEED LIMITS 
     public static final double limelightTurnSpeedLimit = 0.30; 
@@ -242,7 +242,7 @@ public final class Constants {
     public static double adjust = 0; 
 
     // VISION PIDS 
-    public static double visionDriveKp = 0.075; 
+    public static double visionDriveKp = 0.08; 
     public static double visionDriveKi = 0.00; 
     public static double visionDriveKd = 0.00; 
 
@@ -298,7 +298,8 @@ public final class Constants {
     public static double trapDistance = Units.inchesToMeters(0); 
 
     // PHOTON DRIVE PID 
-    public static double driveKp = 0.4; 
+    // public static double driveKp = 0.4; 
+    public static double driveKp = 0.3; 
     public static double driveKi = 0; 
     public static double driveKd = 0; 
 
@@ -309,7 +310,7 @@ public final class Constants {
     
     // PHOTON MAX DRIVE AND SPEED CUT OFFS 
     public static double photonMaxTurnSpeed = 0.3; 
-    public static double photonMaxDriveSpeed = 0.65; 
+    public static double photonMaxDriveSpeed = 0.60; 
 
     // APRIL TAG IDS 
     public static int sourceLeftBlueID = 1; 
@@ -336,7 +337,7 @@ public final class Constants {
     public static int stageBlueRightID = 15; 
     public static int stageBlueCentreID = 16; 
 
-    public static double speakerMiddleApproachPitch = 0; 
+    public static double speakerMiddleApproachPitch = 12; 
     public static double speakerMiddleAlignYaw = 0; 
 
     // photon alignment tight tolerance 

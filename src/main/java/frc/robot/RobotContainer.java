@@ -42,8 +42,6 @@ import frc.robot.commands.AutoRoutines.AutoRedRoutines.threeNoteAuto.RedPreloadC
 import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndCentre;
 import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndLeft;
 import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndRight;
-import frc.robot.commands.ClimbCommands.climbManualSpeedCommand;
-import frc.robot.commands.ClimbCommands.climbToPositionCommand;
 import frc.robot.commands.ConveyerCommands.conveyCommand;
 import frc.robot.commands.ConveyerCommands.conveyerSetSpeedCommand;
 import frc.robot.commands.ConveyerCommands.conveyerTillSensorTwoCommand;
@@ -61,7 +59,6 @@ import frc.robot.commands.ShooterCommands.setShooterVelocityCommand;
 import frc.robot.commands.TruckLightCommands.truckCommand;
 import frc.robot.commands.VisionCommands.VisionDriveToTargetCommand;
 import frc.robot.commands.VisionCommands.VisionTurnToTargetCommand;
-import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ConveyerSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -103,7 +100,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(); 
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ConveyerSubsystem m_ConveyerSubsystem = new ConveyerSubsystem();  
-  private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem(); 
+  // private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem(); 
   private final VisionSubsystem m_VisionSubsystem = new VisionSubsystem(); 
   private final LightSubsystem m_LightSubsystem = new LightSubsystem(); 
   private final TruckSubsystem m_TruckSubsystem = new TruckSubsystem(); 
@@ -294,7 +291,7 @@ public class RobotContainer {
     // AUTO INTAKE 
     BUTTON_Y_PRIMARY.onTrue(
       new SequentialCommandGroup(
-        new autoHuntNoteCommand(m_DriveSubsystem, m_VisionSubsystem), 
+        new autoHuntNoteCommand(m_DriveSubsystem, m_VisionSubsystem),
         new autoEatNoteCommand(m_DriveSubsystem, m_ConveyerSubsystem, m_IntakeSubsystem) 
 
       )
@@ -305,11 +302,11 @@ public class RobotContainer {
     ); 
 
     // CLIMB MANUAL CONTROLS 
-    controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
-    controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualExtendSpeed));
+    // controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
+    // controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualExtendSpeed));
     
-    controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
-    controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualRetractSpeed)); 
+    // controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
+    // controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualRetractSpeed)); 
 
     
     // -----------------------------------------------------------------------------------------------------
@@ -446,7 +443,7 @@ public class RobotContainer {
     m_DriveSubsystem.resetEncoders();
     m_DriveSubsystem.zeroHeading();
     m_ShooterSubsystem.resetEncoders(); 
-    m_ClimbSubsystem.resetEncoders();
+    // m_ClimbSubsystem.resetEncoders();
   }
 
   /**
