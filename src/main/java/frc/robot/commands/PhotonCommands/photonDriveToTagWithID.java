@@ -10,42 +10,41 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.autoConstants;
 import frc.robot.Constants.photonVisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonSubsystem;
 
-public class photonAlignToTagWithID extends Command {
+public class photonDriveToTagWithID extends Command {
 
   private DriveSubsystem DRIVE_SUBSYSTEM; 
   private PhotonSubsystem PHOTON_SUBSYSTEM; 
 
-  private double alignmentSetpoint; 
+  private double driveSetpoint; 
 
-  private double rotationSpeed;
+  private double driveSpeed;
 
-  private double bestTargetYaw; 
-
-  private int targetId; 
-
+  private double bestTargetPitch; 
   private boolean endCommand;
 
-  private PIDController turnController; 
+  private PIDController driveController; 
 
   private double totalTimeSinceLastSeen; 
   private double totalRunTime; 
+  
+  private int targetId; 
 
-  private SlewRateLimiter turnLimiter = new SlewRateLimiter(DriveConstants.turnSlew); 
-
-  /** Creates a new photonAlignToTagWithID. */
-  public photonAlignToTagWithID(PhotonSubsystem photon, DriveSubsystem drive, double targetAngle, int targetId, boolean endCommand) {
+  private SlewRateLimiter driveLimiter = new SlewRateLimiter(DriveConstants.driveSlew); 
+  /** Creates a new photonDriveToTagWithID. */
+  public photonDriveToTagWithID(PhotonSubsystem photon, DriveSubsystem drive, double targetPitch, int targetId, boolean endCommand) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.alignmentSetpoint = targetAngle; 
+    this.driveSetpoint = targetPitch; 
     this.DRIVE_SUBSYSTEM = drive; 
     this.PHOTON_SUBSYSTEM = photon;
     this.targetId = targetId; 
     this.endCommand = endCommand; 
 
-    this.turnController = new PIDController(photonVisionConstants.turnKp, photonVisionConstants.turnKi, photonVisionConstants.turnKd); 
+    this.driveController = new PIDController(photonVisionConstants.driveKp, photonVisionConstants.driveKi, photonVisionConstants.driveKd); 
 
     addRequirements(DRIVE_SUBSYSTEM);
     addRequirements(PHOTON_SUBSYSTEM);
@@ -54,12 +53,12 @@ public class photonAlignToTagWithID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    turnController.reset();
-    rotationSpeed = 0; 
-
-
+    driveController.reset();
+    driveSpeed = 0; 
     totalRunTime = System.currentTimeMillis(); 
+    DRIVE_SUBSYSTEM.resetEncoders(); 
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -70,42 +69,44 @@ public class photonAlignToTagWithID extends Command {
     if(PHOTON_SUBSYSTEM.photonHasTargets()){
       if(PHOTON_SUBSYSTEM.getBestTarget(targetId) != null){
         bestTarget = PHOTON_SUBSYSTEM.getBestTarget(targetId); 
-        bestTargetYaw = PHOTON_SUBSYSTEM.getBestTargetYaw(); 
+        bestTargetPitch = PHOTON_SUBSYSTEM.getBestTargetPitch(); 
         totalTimeSinceLastSeen = System.currentTimeMillis(); 
       }else{}
     }else{
-
+      bestTargetPitch = -2; 
     }
 
-    rotationSpeed = turnController.calculate(bestTargetYaw, alignmentSetpoint);
+    driveSpeed = -driveController.calculate(bestTargetPitch, driveSetpoint);
 
-    if(rotationSpeed > photonVisionConstants.photonMaxTurnSpeed){
-      rotationSpeed = photonVisionConstants.photonMaxTurnSpeed; 
+    if(driveSpeed > photonVisionConstants.photonMaxDriveSpeed){
+      driveSpeed = photonVisionConstants.photonMaxDriveSpeed; 
     }
 
-    else if(rotationSpeed < -photonVisionConstants.photonMaxTurnSpeed){
-      rotationSpeed = -photonVisionConstants.photonMaxTurnSpeed; 
+    else if(driveSpeed < -photonVisionConstants.photonMaxDriveSpeed){
+      driveSpeed = -photonVisionConstants.photonMaxDriveSpeed; 
     }
 
 
-    DRIVE_SUBSYSTEM.setTank(turnLimiter.calculate(rotationSpeed), -turnLimiter.calculate(rotationSpeed));
+    DRIVE_SUBSYSTEM.setTank(driveLimiter.calculate(driveSpeed), driveLimiter.calculate(driveSpeed));
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    autoConstants.distanceDrivenDurringPhoton = DRIVE_SUBSYSTEM.getAverageEncoderDistanceInInches(); 
     DRIVE_SUBSYSTEM.stop(); 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+
     if(endCommand == true){
       return true; 
     }
 
-    else if(Math.abs(PHOTON_SUBSYSTEM.getBestTargetYaw() - alignmentSetpoint) < 10){
+    else if(PHOTON_SUBSYSTEM.getBestTargetPitch() > driveSetpoint){
       return true; 
     }
 
@@ -120,5 +121,6 @@ public class photonAlignToTagWithID extends Command {
     else{
       return false;
     }
+    
   }
 }

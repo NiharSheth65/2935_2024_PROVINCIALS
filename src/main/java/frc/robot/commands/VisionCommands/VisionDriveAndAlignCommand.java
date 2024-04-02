@@ -96,7 +96,7 @@ public class VisionDriveAndAlignCommand extends Command {
       turnSpeed = -VisionConstants.limelightTurnSpeedLimit; 
     }
 
-    DRIVE_SUBSYSTEM.setTank(drive_Limiter.calculate(driveSpeed) - turn_Limiter.calculate(turnSpeed), drive_Limiter.calculate(driveSpeed) + turn_Limiter.calculate(turnSpeed));
+    DRIVE_SUBSYSTEM.setTank(drive_Limiter.calculate(driveSpeed) + turn_Limiter.calculate(turnSpeed), drive_Limiter.calculate(driveSpeed) - turn_Limiter.calculate(turnSpeed));
   }
 
   // Called once the command ends or is interrupted.

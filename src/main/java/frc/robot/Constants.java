@@ -95,7 +95,7 @@ public final class Constants {
     public static final double turnKd = 0.0; 
 
     // DRIVE FORWARD INTAKING DISTANCE
-    public static final double driveForwardToIntake = 24; 
+    public static final double driveForwardToIntake = 36; 
   }
 
 
@@ -111,7 +111,7 @@ public final class Constants {
     public static double gyroTurnMaxSpeed = 0.6; 
 
     // GYRO TURN PID 
-    public static double gryoTurnKp = 0.03; 
+    public static double gryoTurnKp = 0.035; 
     public static double gryoTurnKi = 0.025; 
     public static double gryoTurnKd = 0; 
   }
@@ -211,7 +211,7 @@ public final class Constants {
     public static final double goalHeight = 0; 
 
     // LIMELIGHT PIPELINES 
-    public static final int ambientPipeline = 1; 
+    public static final int ambientPipeline = 0; 
 
     // TOLERANCES FOR LINING UP TO NOTE 
     public static final double roughAlignmentTolerance = 5.5; 
@@ -224,7 +224,7 @@ public final class Constants {
     public static final double limelightDriveForwardAndIntakeDistance = limelightDesiredApproachDistance + 3;
 
     // VISION DRIVE TO PITCH 
-    public static final double limelightReadToIntakePitch = -21; 
+    public static final double limelightReadToIntakePitch = -18; 
     
     // LIMELIGHT TURN AND DRIVE SPEED LIMITS 
     public static final double limelightTurnSpeedLimit = 0.30; 
@@ -279,7 +279,7 @@ public final class Constants {
   public static class photonVisionConstants{
 
     // CAMERA NAME 
-    public static String cameraName= "USB_Camera"; 
+    public static String cameraName= "wide-angle-camera"; 
     
     // CAMERA HEIGHT AND ANGLE 
     public static double cameraHeight = Units.inchesToMeters(22.5); 
@@ -316,6 +316,7 @@ public final class Constants {
     public static int sourceRightBlueID = 2; 
 
     public static int speakerMiddleRedID = 4;
+    // public static int speakerMiddleRedID = 5;
     public static int speakerOffCentreRedID = 3;
 
     public static int ampRedID = 5; 
@@ -335,10 +336,23 @@ public final class Constants {
     public static int stageBlueRightID = 15; 
     public static int stageBlueCentreID = 16; 
 
+    public static double speakerMiddleApproachPitch = 0; 
+    public static double speakerMiddleAlignYaw = 0; 
+
+    // photon alignment tight tolerance 
+    public static double photonTightTolerance = 5; 
+
     // PHOTON COMMAND TIMEOUTS
-    public static double photonTargetAcquiredTimeOut = 1000; 
-    public static double photonTurnTargetingTimeOut = 2000; 
+    public static double photonTargetAcquiredTimeOut = 2000; 
+    public static double photonTurnTargetingTimeOut = 4000; 
     public static double photonDriveTargetingTimeOut= 2500; 
+
+    // PHOTON STAGE VARIABLES 
+    public static double photonTrapTargetPitch = 21.5;  
+    public static double photonTrapTargetYaw = 1.25; 
+    public static double photonTrapDriveSpeed = 0.35; 
+
+    public static int allianceTag = speakerMiddleRedID; 
   }
 
   public static class autoConstants{
@@ -353,6 +367,12 @@ public final class Constants {
     // TURN TOLERANCE 
     public static double autoGyroHasTurnedTolerance = 5;
 
+
+    // DRIVE BACK DISTANCES 
+    public static double driveBackDistanceFromNote2 = 55; 
+
+    // DISTANCE DRIVEN BY PHOTON VISION
+    public static double distanceDrivenDurringPhoton; 
   }
 
   public static class LedConstants{

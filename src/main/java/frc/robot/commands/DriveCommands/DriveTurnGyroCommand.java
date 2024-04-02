@@ -21,7 +21,7 @@ public class DriveTurnGyroCommand extends Command {
   private boolean endCommand; 
   private PIDController turnController; 
 
-  private SlewRateLimiter turnLimiter = new SlewRateLimiter(DriveConstants.turnSlew); 
+  private SlewRateLimiter turnLimiter = new SlewRateLimiter(2); 
 
   private double initTime; 
 
@@ -39,7 +39,7 @@ public class DriveTurnGyroCommand extends Command {
   @Override
   public void initialize() {
     turnController.reset();
-    DRIVE_SUBSYSTEM.zeroHeading();
+    // DRIVE_SUBSYSTEM.zeroHeading();
     initTime = System.currentTimeMillis(); 
   }
 

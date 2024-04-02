@@ -27,6 +27,9 @@ public class PhotonSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("target id", StatusVariables.targetID); 
+
+    SmartDashboard.putBoolean("PHOTON ACTIVE", photonActive()); 
+    SmartDashboard.putBoolean("PHOTON HAS TARGET", photonHasTargets()); 
   }
 
   public boolean photonActive(){

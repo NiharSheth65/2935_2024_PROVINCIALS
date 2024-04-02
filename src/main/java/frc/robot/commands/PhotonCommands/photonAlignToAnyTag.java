@@ -4,8 +4,6 @@
 
 package frc.robot.commands.PhotonCommands;
 
-import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +12,7 @@ import frc.robot.Constants.photonVisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonSubsystem;
 
-public class photonAlignToTagWithID extends Command {
+public class photonAlignToAnyTag extends Command {
 
   private DriveSubsystem DRIVE_SUBSYSTEM; 
   private PhotonSubsystem PHOTON_SUBSYSTEM; 
@@ -24,9 +22,6 @@ public class photonAlignToTagWithID extends Command {
   private double rotationSpeed;
 
   private double bestTargetYaw; 
-
-  private int targetId; 
-
   private boolean endCommand;
 
   private PIDController turnController; 
@@ -35,14 +30,12 @@ public class photonAlignToTagWithID extends Command {
   private double totalRunTime; 
 
   private SlewRateLimiter turnLimiter = new SlewRateLimiter(DriveConstants.turnSlew); 
-
-  /** Creates a new photonAlignToTagWithID. */
-  public photonAlignToTagWithID(PhotonSubsystem photon, DriveSubsystem drive, double targetAngle, int targetId, boolean endCommand) {
+  /** Creates a new photonAlignToAnyTag. */
+  public photonAlignToAnyTag(PhotonSubsystem photon, DriveSubsystem drive, double targetAngle, boolean endCommand) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.alignmentSetpoint = targetAngle; 
     this.DRIVE_SUBSYSTEM = drive; 
     this.PHOTON_SUBSYSTEM = photon;
-    this.targetId = targetId; 
     this.endCommand = endCommand; 
 
     this.turnController = new PIDController(photonVisionConstants.turnKp, photonVisionConstants.turnKi, photonVisionConstants.turnKd); 
@@ -64,17 +57,10 @@ public class photonAlignToTagWithID extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    PhotonTrackedTarget bestTarget = null; 
-
     if(PHOTON_SUBSYSTEM.photonHasTargets()){
-      if(PHOTON_SUBSYSTEM.getBestTarget(targetId) != null){
-        bestTarget = PHOTON_SUBSYSTEM.getBestTarget(targetId); 
-        bestTargetYaw = PHOTON_SUBSYSTEM.getBestTargetYaw(); 
-        totalTimeSinceLastSeen = System.currentTimeMillis(); 
-      }else{}
+      bestTargetYaw = PHOTON_SUBSYSTEM.getYaw(); 
     }else{
-
+      bestTargetYaw = 0; 
     }
 
     rotationSpeed = turnController.calculate(bestTargetYaw, alignmentSetpoint);
@@ -105,15 +91,7 @@ public class photonAlignToTagWithID extends Command {
       return true; 
     }
 
-    else if(Math.abs(PHOTON_SUBSYSTEM.getBestTargetYaw() - alignmentSetpoint) < 10){
-      return true; 
-    }
-
-    else if(Math.abs(System.currentTimeMillis() - totalTimeSinceLastSeen) > photonVisionConstants.photonTargetAcquiredTimeOut){
-      return true; 
-    }
-
-    else if(Math.abs(System.currentTimeMillis() - totalRunTime) > photonVisionConstants.photonTurnTargetingTimeOut){
+    else if(Math.abs(PHOTON_SUBSYSTEM.getYaw() - alignmentSetpoint) < photonVisionConstants.photonTightTolerance){
       return true; 
     }
 

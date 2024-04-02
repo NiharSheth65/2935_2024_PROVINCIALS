@@ -12,19 +12,50 @@ import frc.robot.Constants.StatusVariables;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.conveyerConstants;
 import frc.robot.Constants.photonVisionConstants;
+import frc.robot.commands.AutoCommandBlocks.autoDigestNoteCommand;
+import frc.robot.commands.AutoCommandBlocks.autoEatNoteCommand;
+import frc.robot.commands.AutoCommandBlocks.autoHuntNoteCommand;
+import frc.robot.commands.AutoCommandBlocks.autoHuntSpecificTag;
+import frc.robot.commands.AutoCommandBlocks.autoHuntTag;
+import frc.robot.commands.AutoCommandBlocks.autoRevUpCommand;
+import frc.robot.commands.AutoCommandBlocks.autoScoreAmp;
+import frc.robot.commands.AutoCommandBlocks.autoScoreTrap;
+import frc.robot.commands.AutoCommandBlocks.autoShootNoteCommand;
+import frc.robot.commands.AutoCommandBlocks.autoSimpleDigestCommand;
+import frc.robot.commands.AutoNoteBlocks.note1Block;
+import frc.robot.commands.AutoNoteBlocks.note2Block;
+import frc.robot.commands.AutoNoteBlocks.note3Block;
+import frc.robot.commands.AutoNoteBlocks.note4Block;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.fourNoteAuto.BluePreloadCentreLeftAndRight;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.fourNoteAuto.BluePreloadCentreRightAndLeft;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.oneNoteAuto.BlueShootPreloadAndExitCommunity;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.threeNoteAuto.BluePreloadCentreAndLeft;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.threeNoteAuto.BluePreloadCentreAndRight;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.twoNoteAuto.BluePreloadAndCentre;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.twoNoteAuto.BluePreloadAndLeft;
+import frc.robot.commands.AutoRoutines.AutoBlueRoutines.twoNoteAuto.BluePreloadAndRight;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.fourNoteAuto.RedPreloadCentreLeftAndRight;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.fourNoteAuto.RedPreloadCentreRightAndLeft;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.oneNoteAuto.RedShootPreloadAndExitCommunity;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.threeNoteAuto.RedPreloadCentreAndLeft;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.threeNoteAuto.RedPreloadCentreAndRight;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndCentre;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndLeft;
+import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndRight;
 import frc.robot.commands.ClimbCommands.climbManualSpeedCommand;
 import frc.robot.commands.ClimbCommands.climbToPositionCommand;
-import frc.robot.commands.CommandBlocks.autoDigestNoteCommand;
-import frc.robot.commands.CommandBlocks.autoEatNoteCommand;
-import frc.robot.commands.CommandBlocks.autoHuntNoteCommand;
-import frc.robot.commands.CommandBlocks.autoRevUpCommand;
 import frc.robot.commands.ConveyerCommands.conveyCommand;
 import frc.robot.commands.ConveyerCommands.conveyerSetSpeedCommand;
+import frc.robot.commands.ConveyerCommands.conveyerTillSensorTwoCommand;
 import frc.robot.commands.DriveCommands.DefaultDriveCommand;
 import frc.robot.commands.DriveCommands.DriveForwardSetDistance;
 import frc.robot.commands.IntakeCommand.IntakePowerCommand;
 import frc.robot.commands.LedCommands.ledCommand;
+import frc.robot.commands.PhotonCommands.photonAlignToAnyTag;
 import frc.robot.commands.PhotonCommands.photonAlignToTagWithID;
+import frc.robot.commands.PhotonCommands.photonAlignToTrap;
+import frc.robot.commands.PhotonCommands.photonDriveToAnyTag;
+import frc.robot.commands.PhotonCommands.photonDriveToTrap;
 import frc.robot.commands.ShooterCommands.setShooterSpeedCommand;
 import frc.robot.commands.ShooterCommands.setShooterVelocityCommand;
 import frc.robot.commands.TruckLightCommands.truckCommand;
@@ -40,12 +71,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TruckSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
+import java.io.ObjectInputFilter.Status;
 import java.util.Optional;
 
 import org.photonvision.proto.Photon;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -99,10 +132,99 @@ public class RobotContainer {
   private final CommandGenericHID controllerPrimary = new CommandGenericHID(OperatorConstants.primaryControllerPort);  
   private final CommandGenericHID controllerSecondary = new CommandGenericHID(OperatorConstants.secondaryControllerPort);  
 
+  // ------------------------------------------------------------
+
+  // RED AUTOS
+
+  // RED ONE PIECE 
+  // private final Command m_redPreload = new note1Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, photonVisionConstants.speakerMiddleRedID); 
+  // private final Command m_redPreload = new note2Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem, photonVisionConstants.speakerMiddleRedID);
+ 
+  // private final Command m_redPreload = new RedPreloadAndCentre(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_redPreload = new note4Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem, photonVisionConstants.allianceTag); 
+  // private final Command m_redPreload = new note3Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem, photonVisionConstants.allianceTag); 
+
+  private final Command m_redPreloadAndDriveOut = new RedShootPreloadAndExitCommunity(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem); 
+  
+  // RED TWO PIECE 
+  private final Command m_redTwoPieceCentre = new RedPreloadAndCentre(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_redTwoPieceClear = new RedPreloadAndRight(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_redTwoPieceStage = new RedPreloadAndLeft(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+
+  // RED THREE PIECE 
+  private final Command m_redThreePieceClear = new RedPreloadCentreAndRight(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_redThreePieceStage = new RedPreloadCentreAndLeft(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  
+  // RED FOUR PIECE 
+  private final Command m_redFourPieceClearFirstStageLast = new RedPreloadCentreRightAndLeft(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem);
+  private final Command m_redFourPieceStageFirstClearLast = new RedPreloadCentreLeftAndRight(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem);
+
+  // BLUE AUTOS
+
+  // RED ONE PIECE 
+  private final Command m_bluePreload = new BluePreloadAndCentre(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_bluePreloadAndDriveOut = new BlueShootPreloadAndExitCommunity(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem); 
+  
+  // RED TWO PIECE 
+  private final Command m_blueTwoPieceCentre = new BluePreloadAndCentre(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_blueTwoPieceClear = new BluePreloadAndLeft(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_blueTwoPieceStage = new BluePreloadAndRight(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+
+  // RED THREE PIECE 
+  private final Command m_blueThreePieceClear = new BluePreloadCentreAndLeft(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  private final Command m_blueThreePieceStage = new BluePreloadCentreAndRight(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
+  
+  // RED FOUR PIECE 
+  private final Command m_blueFourPieceClearFirstStageLast = new BluePreloadCentreLeftAndRight(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem);
+  private final Command m_blueFourPieceStageFirstClearLast = new BluePreloadCentreRightAndLeft(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem);
+
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>(); 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+    // RED AUTOS --------------------------------------------------------------------------------------------------------------
+    
+    // ONE PIECE 
+    m_autoChooser.setDefaultOption("RED PRELOAD", m_redPreload);
+    m_autoChooser.addOption("RED PRELOAD AND EXIT", m_redPreloadAndDriveOut);
+
+    // TWO PIECE  
+    m_autoChooser.addOption("RED TWO PIECE PRELOAD AND CENTRE", m_redTwoPieceCentre);
+    m_autoChooser.addOption("RED TWO PIECE PRELOAD AND STAGE", m_redTwoPieceStage);
+    m_autoChooser.addOption("RED TWO PIECE PRELOAD AND CLEAR", m_redTwoPieceClear);
+
+    // THREE PIECE 
+    m_autoChooser.addOption("RED THREE PIECE PRELOAD AND CLEAR", m_redThreePieceClear);
+    m_autoChooser.addOption("RED THREE PIECE PRELOAD AND STAGE", m_redThreePieceStage);
+    
+    // FOUR PIECE 
+    m_autoChooser.addOption("RED FOUR PIECE PRELOAD AND CLEAR", m_redFourPieceClearFirstStageLast);
+    m_autoChooser.addOption("RED FOUR PIECE PRELOAD AND STAGE", m_redFourPieceStageFirstClearLast);
+
+    // BLUE AUTOS --------------------------------------------------------------------------------------------------------------
+    
+    // ONE PIECE 
+    m_autoChooser.setDefaultOption("BLUE PRELOAD", m_bluePreload);
+    m_autoChooser.addOption("BLUE PRELOAD AND EXIT", m_bluePreloadAndDriveOut);
+
+    // TWO PIECE  
+    m_autoChooser.addOption("BLUE TWO PIECE PRELOAD AND CENTRE", m_blueTwoPieceCentre);
+    m_autoChooser.addOption("BLUE TWO PIECE PRELOAD AND STAGE", m_blueTwoPieceStage);
+    m_autoChooser.addOption("BLUE TWO PIECE PRELOAD AND CLEAR", m_blueTwoPieceClear);
+
+    // THREE PIECE 
+    m_autoChooser.addOption("BLUE THREE PIECE PRELOAD AND CLEAR", m_blueThreePieceClear);
+    m_autoChooser.addOption("BLUE THREE PIECE PRELOAD AND STAGE", m_blueThreePieceStage);
+    
+    // FOUR PIECE 
+    m_autoChooser.addOption("BLUE FOUR PIECE PRELOAD AND CLEAR", m_blueFourPieceClearFirstStageLast);
+    m_autoChooser.addOption("BLUE FOUR PIECE PRELOAD AND STAGE", m_blueFourPieceStageFirstClearLast);
+
+    
+    Shuffleboard.getTab("Autonomous").add(m_autoChooser); 
+    
     // Configure the trigger bindings
     configureBindings();
     defaultCommands(); 
@@ -129,20 +251,44 @@ public class RobotContainer {
 
     // CLIMB PID CONTROLS
     BUTTON_A_PRIMARY.toggleOnTrue(
-      new climbToPositionCommand(m_ClimbSubsystem, ClimbConstants.climbFullyExtendedPosition, false)
+      // new climbToPositionCommand(m_ClimbSubsystem, ClimbConstants.climbFullyExtendedPosition, false)
+      
+      
+      new autoScoreTrap(m_DriveSubsystem, m_PhotonSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem)
+     
+
+     
     ); 
 
     BUTTON_A_PRIMARY.toggleOnFalse(
-      new climbToPositionCommand(m_ClimbSubsystem, ClimbConstants.climbFullyRetractedPosition, true)
+      // new climbToPositionCommand(m_ClimbSubsystem, ClimbConstants.climbFullyRetractedPosition, true)
+      new photonDriveToTrap(m_PhotonSubsystem, m_DriveSubsystem, photonVisionConstants.photonTrapTargetPitch, true) 
     ); 
 
     // ALIGN TO TARGET 
     BUTTON_B_PRIMARY.onTrue(
-      new photonAlignToTagWithID(m_PhotonSubsystem, m_DriveSubsystem, 0, 7, false)
+      // new photonAlignToTagWithID(m_PhotonSubsystem, m_DriveSubsystem, 0, 4, false)
+      // new photonAlignToAnyTag(m_PhotonSubsystem, m_DriveSubsystem, 0, false)
+      new ParallelDeadlineGroup(
+        new autoHuntSpecificTag(m_DriveSubsystem, m_PhotonSubsystem, photonVisionConstants.allianceTag, 0, photonVisionConstants.speakerMiddleApproachPitch), 
+        // new autoHuntTag(m_DriveSubsystem, m_PhotonSubsystem), 
+        new autoRevUpCommand(m_ShooterSubsystem, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed)
+      ).andThen(new autoShootNoteCommand(m_DriveSubsystem, m_PhotonSubsystem, m_ConveyerSubsystem, photonVisionConstants.allianceTag))
     ); 
 
     BUTTON_B_PRIMARY.onFalse(
-      new photonAlignToTagWithID(m_PhotonSubsystem, m_DriveSubsystem, 0, 7, true)
+      new photonDriveToAnyTag(m_PhotonSubsystem, m_DriveSubsystem, photonVisionConstants.speakerMiddleApproachPitch, true) 
+    ); 
+
+
+    // AUTONOMOUS AMP SCORING 
+
+    BUTTON_X_PRIMARY.onTrue(
+      new autoScoreAmp(m_DriveSubsystem, m_ConveyerSubsystem, m_ShooterSubsystem, m_IntakeSubsystem, m_PhotonSubsystem)
+    ); 
+
+    BUTTON_X_PRIMARY.onFalse(
+      new photonDriveToAnyTag(m_PhotonSubsystem, m_DriveSubsystem, photonVisionConstants.speakerMiddleApproachPitch, true) 
     ); 
 
     // AUTO INTAKE 
@@ -296,6 +442,12 @@ public class RobotContainer {
 
   }
 
+  public void resetEncoders(){
+    m_DriveSubsystem.resetEncoders();
+    m_DriveSubsystem.zeroHeading();
+    m_ShooterSubsystem.resetEncoders(); 
+    m_ClimbSubsystem.resetEncoders();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -305,6 +457,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
+    resetEncoders();
     return m_autoChooser.getSelected(); 
   }
 }
