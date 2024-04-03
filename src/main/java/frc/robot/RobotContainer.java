@@ -42,11 +42,13 @@ import frc.robot.commands.AutoRoutines.AutoRedRoutines.threeNoteAuto.RedPreloadC
 import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndCentre;
 import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndLeft;
 import frc.robot.commands.AutoRoutines.AutoRedRoutines.twoNoteAuto.RedPreloadAndRight;
+import frc.robot.commands.ClimbCommands.climbManualSpeedCommand;
 import frc.robot.commands.ConveyerCommands.conveyCommand;
 import frc.robot.commands.ConveyerCommands.conveyerSetSpeedCommand;
 import frc.robot.commands.ConveyerCommands.conveyerTillSensorTwoCommand;
 import frc.robot.commands.DriveCommands.DefaultDriveCommand;
 import frc.robot.commands.DriveCommands.DriveForwardSetDistance;
+import frc.robot.commands.DriveCommands.DriveTurnGyroCommand;
 import frc.robot.commands.IntakeCommand.IntakePowerCommand;
 import frc.robot.commands.LedCommands.ledCommand;
 import frc.robot.commands.PhotonCommands.photonAlignToAnyTag;
@@ -59,6 +61,7 @@ import frc.robot.commands.ShooterCommands.setShooterVelocityCommand;
 import frc.robot.commands.TruckLightCommands.truckCommand;
 import frc.robot.commands.VisionCommands.VisionDriveToTargetCommand;
 import frc.robot.commands.VisionCommands.VisionTurnToTargetCommand;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.ConveyerSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -100,7 +103,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem(); 
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ConveyerSubsystem m_ConveyerSubsystem = new ConveyerSubsystem();  
-  // private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem(); 
+  private final ClimbSubsystem m_ClimbSubsystem = new ClimbSubsystem(); 
   private final VisionSubsystem m_VisionSubsystem = new VisionSubsystem(); 
   private final LightSubsystem m_LightSubsystem = new LightSubsystem(); 
   private final TruckSubsystem m_TruckSubsystem = new TruckSubsystem(); 
@@ -134,12 +137,7 @@ public class RobotContainer {
   // RED AUTOS
 
   // RED ONE PIECE 
-  // private final Command m_redPreload = new note1Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, photonVisionConstants.speakerMiddleRedID); 
-  // private final Command m_redPreload = new note2Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem, photonVisionConstants.speakerMiddleRedID);
- 
-  // private final Command m_redPreload = new RedPreloadAndCentre(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem); 
-  private final Command m_redPreload = new note4Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem, photonVisionConstants.allianceTag); 
-  // private final Command m_redPreload = new note3Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, m_VisionSubsystem, m_IntakeSubsystem, photonVisionConstants.allianceTag); 
+  private final Command m_redPreload = new note1Block(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem, photonVisionConstants.speakerMiddleRedID); 
 
   private final Command m_redPreloadAndDriveOut = new RedShootPreloadAndExitCommunity(m_DriveSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem, m_LightSubsystem, m_PhotonSubsystem); 
   
@@ -249,26 +247,20 @@ public class RobotContainer {
     // CLIMB PID CONTROLS
     BUTTON_A_PRIMARY.toggleOnTrue(
       // new climbToPositionCommand(m_ClimbSubsystem, ClimbConstants.climbFullyExtendedPosition, false)
-      
-      
-      new autoScoreTrap(m_DriveSubsystem, m_PhotonSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem)
-     
-
-     
+      new autoScoreTrap(m_DriveSubsystem, m_PhotonSubsystem, m_ShooterSubsystem, m_ConveyerSubsystem)   
+      // new DriveTurnGyroCommand(m_DriveSubsystem, 50, false)
     ); 
 
     BUTTON_A_PRIMARY.toggleOnFalse(
       // new climbToPositionCommand(m_ClimbSubsystem, ClimbConstants.climbFullyRetractedPosition, true)
       new photonDriveToTrap(m_PhotonSubsystem, m_DriveSubsystem, photonVisionConstants.photonTrapTargetPitch, true) 
+      // new DriveTurnGyroCommand(m_DriveSubsystem, 0, true)
     ); 
 
     // ALIGN TO TARGET 
     BUTTON_B_PRIMARY.onTrue(
-      // new photonAlignToTagWithID(m_PhotonSubsystem, m_DriveSubsystem, 0, 4, false)
-      // new photonAlignToAnyTag(m_PhotonSubsystem, m_DriveSubsystem, 0, false)
       new ParallelDeadlineGroup(
         new autoHuntSpecificTag(m_DriveSubsystem, m_PhotonSubsystem, photonVisionConstants.allianceTag, 0, photonVisionConstants.speakerMiddleApproachPitch), 
-        // new autoHuntTag(m_DriveSubsystem, m_PhotonSubsystem), 
         new autoRevUpCommand(m_ShooterSubsystem, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed)
       ).andThen(new autoShootNoteCommand(m_DriveSubsystem, m_PhotonSubsystem, m_ConveyerSubsystem, photonVisionConstants.allianceTag))
     ); 
@@ -293,7 +285,6 @@ public class RobotContainer {
       new SequentialCommandGroup(
         new autoHuntNoteCommand(m_DriveSubsystem, m_VisionSubsystem),
         new autoEatNoteCommand(m_DriveSubsystem, m_ConveyerSubsystem, m_IntakeSubsystem) 
-
       )
     ); 
 
@@ -302,11 +293,11 @@ public class RobotContainer {
     ); 
 
     // CLIMB MANUAL CONTROLS 
-    // controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
-    // controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualExtendSpeed));
+    controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
+    controllerPrimary.axisGreaterThan(OperatorConstants.rightTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualExtendSpeed));
     
-    // controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
-    // controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualRetractSpeed)); 
+    controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnFalse(new climbManualSpeedCommand(m_ClimbSubsystem, 0)); 
+    controllerPrimary.axisGreaterThan(OperatorConstants.leftTriggerAxis, OperatorConstants.triggerThreshold).toggleOnTrue(new climbManualSpeedCommand(m_ClimbSubsystem, ClimbConstants.climbManualRetractSpeed)); 
 
     
     // -----------------------------------------------------------------------------------------------------

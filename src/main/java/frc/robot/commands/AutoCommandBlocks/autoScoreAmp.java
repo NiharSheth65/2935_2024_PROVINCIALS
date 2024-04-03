@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.DriveCommands.DriveForwardSetDistance;
+import frc.robot.commands.PhotonCommands.photonAlignToAnyTag;
+import frc.robot.commands.PhotonCommands.photonDriveToAnyTag;
 import frc.robot.subsystems.ConveyerSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -28,12 +30,17 @@ public class autoScoreAmp extends SequentialCommandGroup {
 
       new ParallelCommandGroup(
         new autoDigestNoteCommand(conveyer, intake, shooter), 
-        new autoHuntTag(drive, photon)
+        
+        new SequentialCommandGroup(
+          new photonAlignToAnyTag(photon, drive, -8.5, false), 
+          new photonDriveToAnyTag(photon, drive, 9, false), 
+          new photonAlignToAnyTag(photon, drive, -8.5, false)
+        ) 
       ), 
 
       new ParallelDeadlineGroup(
 
-        new DriveForwardSetDistance(drive, -38, DriveConstants.autoSpeed),
+        new DriveForwardSetDistance(drive, -25, DriveConstants.autoSpeed),
         new autoRevUpCommand(shooter, ShooterConstants.ampTopMotorSpeed, ShooterConstants.ampBottomMotorSpeed)
       ), 
 

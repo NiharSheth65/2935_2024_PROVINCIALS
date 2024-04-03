@@ -33,7 +33,7 @@ public class autoScoreTrap extends SequentialCommandGroup {
           new photonAlignToTrap(photon, drive, photonVisionConstants.photonTrapTargetYaw, false)
         ), 
 
-        new autoRevUpCommand(shooter, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed)
+        new autoRevUpCommand(shooter, ShooterConstants.trapTopMotorSpeed, ShooterConstants.trapBottomMotorSpeed)
       ), 
 
       new autoShootNoteCommand(drive, photon, conveyer, 0)

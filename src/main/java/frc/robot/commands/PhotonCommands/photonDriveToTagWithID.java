@@ -66,6 +66,7 @@ public class photonDriveToTagWithID extends Command {
     photonDriveEnded = false; 
     positionReached = 0; 
     bestTargetPitch = 0;
+    autoConstants.distanceDrivenDurringPhoton = 0; 
 
   }
 
@@ -125,6 +126,7 @@ public class photonDriveToTagWithID extends Command {
   public void end(boolean interrupted) {
     System.out.println("THE PHOTON DRIVE COMMAND HAS ENDED");
     autoConstants.distanceDrivenDurringPhoton = DRIVE_SUBSYSTEM.getAverageEncoderDistanceInInches(); 
+    System.out.println("DISTANCE DRIVEN DURING PHOTON" + autoConstants.distanceDrivenDurringPhoton);
     DRIVE_SUBSYSTEM.stop(); 
   }
 
@@ -136,7 +138,7 @@ public class photonDriveToTagWithID extends Command {
       return true; 
     }
 
-    if(bestTargetPitch > driveSetpoint && positionReached >= 20){
+    if(bestTargetPitch > driveSetpoint && positionReached > 5){
       System.out.println("PHOTON PITCH: " + bestTargetPitch); 
       System.out.println("POSITION REACHED" + positionReached); 
       return true; 

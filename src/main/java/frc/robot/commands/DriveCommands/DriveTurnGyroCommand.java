@@ -6,6 +6,8 @@ package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.GyroConstants;
@@ -25,6 +27,8 @@ public class DriveTurnGyroCommand extends Command {
 
   private double initTime; 
 
+  private int inPositionCounter = 0; 
+
   public DriveTurnGyroCommand(DriveSubsystem drive, double angle, boolean end) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.DRIVE_SUBSYSTEM = drive; 
@@ -39,8 +43,9 @@ public class DriveTurnGyroCommand extends Command {
   @Override
   public void initialize() {
     turnController.reset();
-    // DRIVE_SUBSYSTEM.zeroHeading();
+    DRIVE_SUBSYSTEM.zeroHeading();
     initTime = System.currentTimeMillis(); 
+    inPositionCounter = 0; 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +59,12 @@ public class DriveTurnGyroCommand extends Command {
 
     else if(outputSpeed < -GyroConstants.gyroTurnMaxSpeed){
       outputSpeed = -GyroConstants.gyroTurnMaxSpeed; 
+    }
+
+    SmartDashboard.putNumber("gryo turn speeed", outputSpeed); 
+
+    if(Math.abs(DRIVE_SUBSYSTEM.getYaw() - desiredAngle) < GyroConstants.autoGyroHasTurnedTolerance){
+      inPositionCounter++; 
     }
 
     DRIVE_SUBSYSTEM.setTank(-turnLimiter.calculate(outputSpeed), turnLimiter.calculate(outputSpeed));
@@ -77,10 +88,14 @@ public class DriveTurnGyroCommand extends Command {
     else if(Math.abs(initTime - System.currentTimeMillis()) > GyroConstants.autoGyroTurnTimeOut){
       return true;
     } 
-
+    
     else if(Math.abs(DRIVE_SUBSYSTEM.getYaw() - desiredAngle) < GyroConstants.autoGyroHasTurnedTolerance){
       return true; 
     }
+
+    // else if(Math.abs(DRIVE_SUBSYSTEM.getYaw()) > Math.abs(desiredAngle)){
+    //   return true; 
+    // }
     
     else{
       return false;

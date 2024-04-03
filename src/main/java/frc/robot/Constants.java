@@ -90,7 +90,7 @@ public final class Constants {
     public static final double driveDistanceKd = 0.0; 
 
     // GRYO TURN PID 
-    public static final double turnKp = 0.005; 
+    public static final double turnKp = 0.01; 
     public static final double turnKi = 0.0; 
     public static final double turnKd = 0.0; 
 
@@ -104,15 +104,15 @@ public final class Constants {
     
     // GYRO END CONSTRAINS 
     public static final double autoGyroHasTurnedTolerance = 5; 
-    public static final double autoGyroTurnTimeOut = 3000; 
+    public static final double autoGyroTurnTimeOut = 2000; 
 
 
     // GYRO COMMAND TURN SPEED 
-    public static double gyroTurnMaxSpeed = 0.6; 
+    public static double gyroTurnMaxSpeed = 0.8; 
 
     // GYRO TURN PID 
     public static double gryoTurnKp = 0.035; 
-    public static double gryoTurnKi = 0.025; 
+    public static double gryoTurnKi = 0.010; 
     public static double gryoTurnKd = 0; 
   }
 
@@ -127,8 +127,12 @@ public final class Constants {
     public static final double shooterOffSpeed = 0.0; 
     
     // SPEAKER SHOT 
-    public static final double speakerTopMotorSpeed = -5700*0.80; 
-    public static final double speakerBottomMotorSpeed = 5700*0.80; 
+    public static final double speakerTopMotorSpeed = -5700*0.90; 
+    public static final double speakerBottomMotorSpeed = 5700*0.90; 
+
+    // TRAP SHOT 
+    public static final double trapTopMotorSpeed = -5700*0.80; 
+    public static final double trapBottomMotorSpeed = 5700*0.83; 
 
     // DISTANCE SHOT
     public static final double distanceTopMotorSpeed = -5700*0.95; 
@@ -214,7 +218,7 @@ public final class Constants {
     public static final int ambientPipeline = 0; 
 
     // TOLERANCES FOR LINING UP TO NOTE 
-    public static final double roughAlignmentTolerance = 5.5; 
+    public static final double roughAlignmentTolerance = 7.5; 
     public static final double fineAlignmentTolerance = 5.5; 
 
     // STOPPING BEFORE NOTE DISTANCE 
@@ -224,10 +228,10 @@ public final class Constants {
     public static final double limelightDriveForwardAndIntakeDistance = limelightDesiredApproachDistance + 3;
 
     // VISION DRIVE TO PITCH 
-    public static final double limelightReadToIntakePitch = -17; 
+    public static final double limelightReadToIntakePitch = -15; 
     
     // LIMELIGHT TURN AND DRIVE SPEED LIMITS 
-    public static final double limelightTurnSpeedLimit = 0.30; 
+    public static final double limelightTurnSpeedLimit = 0.40; 
     public static final double limelightDriveSpeedLimit = 0.70; 
 
     // TIME OUTS FOR LIMELIGHT COMMANDS 
@@ -242,11 +246,11 @@ public final class Constants {
     public static double adjust = 0; 
 
     // VISION PIDS 
-    public static double visionDriveKp = 0.08; 
+    public static double visionDriveKp = 0.25; 
     public static double visionDriveKi = 0.00; 
     public static double visionDriveKd = 0.00; 
 
-    public static double visionTurnKp = 0.035; 
+    public static double visionTurnKp = 0.04; 
     public static double visionTurnKi = 0.02; 
     public static double visionTurnKd = 0.00;
 
@@ -337,7 +341,7 @@ public final class Constants {
     public static int stageBlueRightID = 15; 
     public static int stageBlueCentreID = 16; 
 
-    public static double speakerMiddleApproachPitch = 12; 
+    public static double speakerMiddleApproachPitch = -5; 
     public static double speakerMiddleAlignYaw = 0; 
 
     // photon alignment tight tolerance 
@@ -349,8 +353,8 @@ public final class Constants {
     public static double photonDriveTargetingTimeOut= 2500; 
 
     // PHOTON STAGE VARIABLES 
-    public static double photonTrapTargetPitch = 21.5;  
-    public static double photonTrapTargetYaw = 1.25; 
+    public static double photonTrapTargetPitch = 12.5;  
+    public static double photonTrapTargetYaw = -6.10; 
     public static double photonTrapDriveSpeed = 0.35; 
 
     public static int allianceTag = speakerMiddleRedID; 
@@ -378,7 +382,7 @@ public final class Constants {
 
   public static class LedConstants{
     // LED PWM PORT 
-    public static final int ledPort = 0; 
+    public static final int ledPort = 1; 
 
     // TRUCK LIGHT DIO PORT 
     public static final int truckLightPort = 3; 

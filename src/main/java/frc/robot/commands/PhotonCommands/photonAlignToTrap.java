@@ -29,6 +29,7 @@ public class photonAlignToTrap extends Command {
   private double totalTimeSinceLastSeen; 
   private double totalRunTime; 
 
+  private int alignedCounter = 0; 
   private SlewRateLimiter turnLimiter = new SlewRateLimiter(DriveConstants.turnSlew); 
 
   /** Creates a new photonAlignToTrap. */
@@ -39,7 +40,7 @@ public class photonAlignToTrap extends Command {
     this.PHOTON_SUBSYSTEM = photon;
     this.endCommand = endCommand; 
 
-    this.turnController = new PIDController(photonVisionConstants.turnKp, photonVisionConstants.turnKi, photonVisionConstants.turnKd); 
+    this.turnController = new PIDController(0.03, photonVisionConstants.turnKi, photonVisionConstants.turnKd); 
 
     addRequirements(DRIVE_SUBSYSTEM);
     addRequirements(PHOTON_SUBSYSTEM);
@@ -51,7 +52,7 @@ public class photonAlignToTrap extends Command {
     turnController.reset();
     rotationSpeed = 0; 
 
-
+    alignedCounter = 0; 
     totalRunTime = System.currentTimeMillis(); 
   }
 
@@ -74,6 +75,10 @@ public class photonAlignToTrap extends Command {
       rotationSpeed = -photonVisionConstants.photonMaxTurnSpeed; 
     }
 
+    if(Math.abs(PHOTON_SUBSYSTEM.getYaw() - alignmentSetpoint) < 0.25){
+      alignedCounter++; 
+    }
+
 
     DRIVE_SUBSYSTEM.setTank(turnLimiter.calculate(rotationSpeed), -turnLimiter.calculate(rotationSpeed));
 
@@ -92,7 +97,7 @@ public class photonAlignToTrap extends Command {
       return true; 
     }
 
-    else if(Math.abs(PHOTON_SUBSYSTEM.getYaw() - alignmentSetpoint) < 0.5){
+    else if(Math.abs(PHOTON_SUBSYSTEM.getYaw() - alignmentSetpoint) < 0.25){
       return true; 
     }
 

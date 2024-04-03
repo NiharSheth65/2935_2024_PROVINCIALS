@@ -32,6 +32,7 @@ public class photonDriveToTrap extends Command {
   private double totalTimeSinceLastSeen; 
   private double totalRunTime; 
   
+  private double inPosition = 0; 
 
   private SlewRateLimiter driveLimiter = new SlewRateLimiter(DriveConstants.driveSlew); 
 
@@ -43,7 +44,7 @@ public class photonDriveToTrap extends Command {
     this.PHOTON_SUBSYSTEM = photon;
     this.endCommand = endCommand; 
 
-    this.driveController = new PIDController(photonVisionConstants.driveKp, photonVisionConstants.driveKi, photonVisionConstants.driveKd); 
+    this.driveController = new PIDController(0.175, photonVisionConstants.driveKi, photonVisionConstants.driveKd); 
 
     addRequirements(DRIVE_SUBSYSTEM);
     addRequirements(PHOTON_SUBSYSTEM);
@@ -54,6 +55,7 @@ public class photonDriveToTrap extends Command {
   public void initialize() {
     driveController.reset();
     driveSpeed = 0; 
+    inPosition = 0; 
     totalRunTime = System.currentTimeMillis(); 
     DRIVE_SUBSYSTEM.resetEncoders(); 
   }
@@ -79,6 +81,10 @@ public class photonDriveToTrap extends Command {
     }
 
 
+    if(Math.abs(PHOTON_SUBSYSTEM.getPitch() - driveSetpoint) < 0.5){
+      inPosition++; 
+    }
+
     DRIVE_SUBSYSTEM.setTank(driveLimiter.calculate(driveSpeed), driveLimiter.calculate(driveSpeed));
   }
 
@@ -97,7 +103,7 @@ public class photonDriveToTrap extends Command {
       return true; 
     }
 
-    else if(Math.abs(PHOTON_SUBSYSTEM.getPitch() - driveSetpoint) < 2){
+    else if(Math.abs(PHOTON_SUBSYSTEM.getPitch() - driveSetpoint) < 1 && inPosition > 30){
       return true; 
     }
 

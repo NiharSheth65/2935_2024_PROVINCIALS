@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.ConveyerCommands.conveyerTillSensorOneCommand;
 import frc.robot.commands.ConveyerCommands.conveyerTillSensorTwoCommand;
 import frc.robot.commands.DriveCommands.DriveForwardSetDistance;
 import frc.robot.commands.IntakeCommand.IntakePowerCommand;
@@ -23,12 +24,17 @@ public class autoEatNoteCommand extends SequentialCommandGroup {
   public autoEatNoteCommand(DriveSubsystem drive, ConveyerSubsystem conveyer, IntakeSubsystem intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+
+    System.out.println("EAT BLOCK START"); 
     addCommands(
       new ParallelDeadlineGroup(
-        new conveyerTillSensorTwoCommand(conveyer), 
+        new conveyerTillSensorOneCommand(conveyer), 
         new DriveForwardSetDistance(drive, DriveConstants.driveForwardToIntake, DriveConstants.autoSpeed),
         new IntakePowerCommand(intake, IntakeConstants.intakeSpeed)
       )
     );
+
+
+    System.out.println("EAT BLOCK END"); 
   }
 }

@@ -98,11 +98,15 @@ public class DriveForwardSetDistance extends Command {
   @Override
   public boolean isFinished() {
   
-    if(Math.abs(distanceInInches - DRIVE_SUBSYSTEM.getAverageEncoderDistanceInInches()) < 2){
+    // if(Math.abs(distanceInInches - DRIVE_SUBSYSTEM.getAverageEncoderDistanceInInches()) < 2){
+    //   return true; 
+    // }
+
+    if(Math.abs(DRIVE_SUBSYSTEM.getAverageEncoderDistanceInInches()) > Math.abs(distanceInInches)){
       return true; 
     }
 
-    else if(Math.abs(System.currentTimeMillis() - initTime) > 3000){
+    else if(Math.abs(System.currentTimeMillis() - initTime) > 2000){
       return true; 
     }
 

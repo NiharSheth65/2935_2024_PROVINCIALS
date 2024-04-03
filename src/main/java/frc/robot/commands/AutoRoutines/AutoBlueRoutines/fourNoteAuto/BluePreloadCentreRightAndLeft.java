@@ -29,8 +29,8 @@ public class BluePreloadCentreRightAndLeft extends SequentialCommandGroup {
     addCommands(
       new note1Block(drive, shooter, conveyer, led, photon, photonVisionConstants.speakerMiddleBlueID), 
       new note2Block(drive, shooter, conveyer, led, photon, vision, intake, photonVisionConstants.speakerMiddleBlueID), 
-      new note4Block(drive, shooter, conveyer, led, photon, vision, intake, photonVisionConstants.speakerMiddleBlueID), 
-      new note3Block(drive, shooter, conveyer, led, photon, vision, intake, photonVisionConstants.speakerMiddleBlueID)
+      new note3Block(drive, shooter, conveyer, led, photon, vision, intake, photonVisionConstants.speakerMiddleBlueID), 
+      new note4Block(drive, shooter, conveyer, led, photon, vision, intake, photonVisionConstants.speakerMiddleBlueID)
     );
   }
 }

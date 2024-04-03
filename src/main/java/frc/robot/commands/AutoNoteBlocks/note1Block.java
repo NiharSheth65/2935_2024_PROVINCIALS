@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.AutoCommandBlocks.autoRevUpCommand;
 import frc.robot.commands.AutoCommandBlocks.autoShootNoteCommand;
+import frc.robot.commands.ConveyerCommands.conveyerClearCommand;
 import frc.robot.commands.ConveyerCommands.conveyerTillSensorThreeCommand;
 import frc.robot.commands.LedCommands.ledCommand;
 import frc.robot.subsystems.ConveyerSubsystem;
@@ -30,7 +31,8 @@ public class note1Block extends SequentialCommandGroup {
 
         new SequentialCommandGroup(
           new conveyerTillSensorThreeCommand(conveyer), 
-          new autoShootNoteCommand(drive, photon, conveyer, targetId)
+          new conveyerClearCommand(conveyer)
+          // new autoShootNoteCommand(drive, photon, conveyer, targetId)
         ), 
 
         new autoRevUpCommand(shooter, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed), 

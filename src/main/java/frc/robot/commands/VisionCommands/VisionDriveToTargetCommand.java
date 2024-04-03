@@ -55,7 +55,7 @@ public class VisionDriveToTargetCommand extends Command {
   @Override
   public void initialize() {
     driveVisionPID.reset();
-
+    
     VISION_SUBSYSTEM.setPipeline(setPipelineNumber);
    
     driveSetPoint = 0; 
