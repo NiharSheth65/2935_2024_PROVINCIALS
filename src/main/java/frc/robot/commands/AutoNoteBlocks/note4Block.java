@@ -51,13 +51,13 @@ public class note4Block extends SequentialCommandGroup {
         new autoSimpleDigestCommand(conveyer, intake, shooter)
       ), 
  
-      new DriveTurnGyroCommand(drive, 50, false), 
+      new DriveTurnGyroCommand(drive, 55, false), 
 
       new ParallelDeadlineGroup(
 
       new SequentialCommandGroup(
         new autoHuntSpecificTag(drive, photon, targetId, photonVisionConstants.speakerMiddleAlignYaw, photonVisionConstants.speakerMiddleApproachPitch),
-        new DriveForwardSetDistance(drive, -(20-Math.abs(autoConstants.distanceDrivenDurringPhoton)), DriveConstants.autoSpeed)
+        new DriveForwardSetDistance(drive, -(15-Math.abs(autoConstants.distanceDrivenDurringPhoton)), DriveConstants.autoSpeed)
       ), 
       
       new autoRevUpCommand(shooter, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed)

@@ -44,10 +44,10 @@ public class note3Block extends SequentialCommandGroup {
       new autoHuntNoteCommand(drive, vision), 
       new autoEatNoteCommand(drive, conveyer, intake), 
 
-      new DriveTurnGyroCommand(drive, -5, false), 
+      new DriveTurnGyroCommand(drive, 5, false), 
       
       new ParallelCommandGroup(
-        new DriveForwardSetDistance(drive, -45, DriveConstants.autoSpeed), 
+        new DriveForwardSetDistance(drive, -55, DriveConstants.autoSpeed), 
         new autoSimpleDigestCommand(conveyer, intake, shooter)
       ), 
  
@@ -57,15 +57,11 @@ public class note3Block extends SequentialCommandGroup {
 
         new SequentialCommandGroup(
           new autoHuntSpecificTag(drive, photon, targetId, photonVisionConstants.speakerMiddleAlignYaw, photonVisionConstants.speakerMiddleApproachPitch),
-          new DriveForwardSetDistance(drive, -(20-Math.abs(autoConstants.distanceDrivenDurringPhoton)), DriveConstants.autoSpeed)
+          new DriveForwardSetDistance(drive, -(15-Math.abs(autoConstants.distanceDrivenDurringPhoton)), DriveConstants.autoSpeed)
         ), 
         
         new autoRevUpCommand(shooter, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed)
       ), 
-
-      // new autoRevUpCommand(shooter, ShooterConstants.speakerTopMotorSpeed, ShooterConstants.speakerBottomMotorSpeed), 
-      // new DriveForwardSetDistance(drive, -7, DriveConstants.autoSpeed), 
-      // new autoShootNoteCommand(drive, photon, conveyer, targetId)
 
       new conveyerClearCommand(conveyer)
     );

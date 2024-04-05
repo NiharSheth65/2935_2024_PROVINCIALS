@@ -143,8 +143,8 @@ public final class Constants {
       
 
     // AMP SHOT 
-    public static final double ampTopMotorSpeed = 5700 * -0.2; 
-    public static final double ampBottomMotorSpeed = 5700 * 0.6; 
+    public static final double ampTopMotorSpeed = 5700 * -0.18; 
+    public static final double ampBottomMotorSpeed = 5700 * 0.58; 
 
     public static final double autoCentreTopMotorSpeed = -5700 * 0.50; 
     public static final double autoCentreBottomMotorSpeed = 5700 * 0.50; 
@@ -245,6 +245,10 @@ public final class Constants {
     // CALCULATING ADJUSTMENT FOR LIMELIGHT TURNS 
     public static double adjust = 0; 
 
+    // GRYO ANGLE WHEN DRIVE IS COMPLETE 
+    public static double driveStartGyroAngle; 
+    public static double adjustEndGyroAngle;  
+
     // VISION PIDS 
     public static double visionDriveKp = 0.25; 
     public static double visionDriveKi = 0.00; 
@@ -341,7 +345,7 @@ public final class Constants {
     public static int stageBlueRightID = 15; 
     public static int stageBlueCentreID = 16; 
 
-    public static double speakerMiddleApproachPitch = -5; 
+    public static double speakerMiddleApproachPitch = 0; 
     public static double speakerMiddleAlignYaw = 0; 
 
     // photon alignment tight tolerance 
@@ -357,7 +361,7 @@ public final class Constants {
     public static double photonTrapTargetYaw = -6.10; 
     public static double photonTrapDriveSpeed = 0.35; 
 
-    public static int allianceTag = speakerMiddleRedID; 
+    public static int allianceTag = speakerMiddleBlueID; 
   }
 
   public static class autoConstants{
@@ -398,6 +402,7 @@ public final class Constants {
     public static final int[] whiteColourCode = {255, 125, 50}; 
     public static final int[] vermillionColourCode = {255, 255, 255}; 
     public static final int[] purpleColourCode = {200, 0, 200}; 
+    public static final int[] yellowColourCode = {200, 150, 0}; 
 
   }
 

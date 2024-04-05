@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.StatusVariables;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -33,6 +34,8 @@ public class VisionTurnToTargetCommand extends Command {
   private double tSlew = 2; 
   private SlewRateLimiter turn_Limiter = new SlewRateLimiter(tSlew); 
 
+  private double commandInitYaw; 
+  private double commandFinalYaw; 
 
   /** Creates a new VisionTurnToTargetCommand. */
   public VisionTurnToTargetCommand(DriveSubsystem drive, VisionSubsystem vision, int pipeline, boolean end) {
@@ -54,6 +57,9 @@ public class VisionTurnToTargetCommand extends Command {
     turnVisionPID.reset();
     VISION_SUBSYSTEM.setPipeline(setPipelineNumber);
     initTime = System.currentTimeMillis(); 
+    VisionConstants.adjustEndGyroAngle = 0; 
+    VisionConstants.adjust = 0; 
+    commandInitYaw = DRIVE_SUBSYSTEM.getYaw(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -84,6 +90,9 @@ public class VisionTurnToTargetCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    commandFinalYaw = DRIVE_SUBSYSTEM.getYaw(); 
+    VisionConstants.adjustEndGyroAngle = DRIVE_SUBSYSTEM.getYaw(); 
+    VisionConstants.adjust = VisionConstants.adjustEndGyroAngle - VisionConstants.driveStartGyroAngle;     
     DRIVE_SUBSYSTEM.stop();
   }
 

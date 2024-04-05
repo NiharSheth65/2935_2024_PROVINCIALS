@@ -11,7 +11,9 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.DriveCommands.DriveForwardSetDistance;
 import frc.robot.commands.PhotonCommands.photonAlignToAnyTag;
+import frc.robot.commands.PhotonCommands.photonAlignToTrap;
 import frc.robot.commands.PhotonCommands.photonDriveToAnyTag;
+import frc.robot.commands.PhotonCommands.photonDriveToTrap;
 import frc.robot.subsystems.ConveyerSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -32,15 +34,19 @@ public class autoScoreAmp extends SequentialCommandGroup {
         new autoDigestNoteCommand(conveyer, intake, shooter), 
         
         new SequentialCommandGroup(
-          new photonAlignToAnyTag(photon, drive, -8.5, false), 
-          new photonDriveToAnyTag(photon, drive, 9, false), 
-          new photonAlignToAnyTag(photon, drive, -8.5, false)
+          new photonAlignToAnyTag(photon, drive, 0, false), 
+          new photonDriveToAnyTag(photon, drive, 18, false), 
+          new photonAlignToAnyTag(photon, drive, 0, false)
+
+          // new photonAlignToTrap(photon, drive, 0, false), 
+          // new photonDriveToTrap(photon, drive, 18, false), 
+          // new photonAlignToTrap(photon, drive, 0, false)
         ) 
       ), 
 
       new ParallelDeadlineGroup(
 
-        new DriveForwardSetDistance(drive, -25, DriveConstants.autoSpeed),
+        new DriveForwardSetDistance(drive, -20, 0.25),
         new autoRevUpCommand(shooter, ShooterConstants.ampTopMotorSpeed, ShooterConstants.ampBottomMotorSpeed)
       ), 
 

@@ -105,7 +105,7 @@ public class photonAlignToTagWithID extends Command {
       return true; 
     }
 
-    else if(Math.abs(PHOTON_SUBSYSTEM.getBestTargetYaw() - alignmentSetpoint) < 10){
+    else if(Math.abs(PHOTON_SUBSYSTEM.getBestTargetYaw() - alignmentSetpoint) < 5){
       return true; 
     }
 

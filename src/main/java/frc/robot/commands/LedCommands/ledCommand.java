@@ -86,9 +86,9 @@ public class ledCommand extends Command {
       }
       
       else{
-        red = 0; 
-        green = 0; 
-        blue = 0;
+        red = LedConstants.yellowColourCode[0]; 
+        green = LedConstants.yellowColourCode[1]; 
+        blue = LedConstants.yellowColourCode[2];
       }
 
     }
